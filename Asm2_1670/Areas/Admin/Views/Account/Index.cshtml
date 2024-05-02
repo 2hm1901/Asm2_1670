@@ -1,4 +1,4 @@
-﻿@model List<Categories>
+﻿@model List<Asm2_1670.Models.User>
 <body>
 <div class="theme-layout" id="scrollup">
 	<section class="overlape">
@@ -8,7 +8,7 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="inner-header">
-							<h3>Welcome Tera Planer</h3>
+							<h3>Welcome Admin</h3>
 						</div>
 					</div>
 				</div>
@@ -40,54 +40,39 @@
 					 <div class="col-lg-9 column">
 						 <div class="padding-left">
 							 <div class="manage-jobs-sec">
-								 <h3>Manager Categories</h3>
-								 <div class="extra-job-info">
-									 <span><i class="la la-clock-o"></i><strong>9</strong> Job Posted</span>
-									 <span><i class="la la-file-text"></i><strong>20</strong> Application</span>
-									 <span><i class="la la-users"></i><strong>18</strong> Active Jobs</span>
-								 </div>
+								 <h3>Manager Account</h3>
 								 <table>
 									 <thead>
 										 <tr>
 											 <td>Name</td>
-											 <td>Icon</td>
-											 <td>Proposer</td>
-											 <td>Status</td>
+											 <td>Email</td>
 											 <td>Action</td>
 										 </tr>
 									 </thead>
 									 <tbody>
-											@foreach (var category in Model)
+											@foreach (var user in Model)
 											{
-											<tr>
-												 <td>
-													 <div class="table-list-title">
-														 <h3><a href="#" title="">@category.Name</a></h3>
-													 </div>
-												 </td>
-												 <td>
-													 <span class="applied-field">@category.Icon</span>
-												 </td>
-												 <td>
-													 <span>@category.Proposer</span>
-												 </td>
-												 <td>
-													 <span class="status active">@category.Status</span>
-												 </td>
-												 <td>
-													 <ul class="action_job">
-														 <li><span>Edit</span><a asp-controller="Categories" asp-action="Edit" asp-route-id ="@category.Id"><i class="la la-pencil"></i></a></li>
-														<li><span>Delete</span><a asp-controller="Categories" asp-action="Delete" asp-route-id ="@category.Id"><i class="la la-trash-o"></i></a>
-
-												</li>
-													 </ul>
-												 </td>
-											</tr>
+												<tr>
+													 <td>
+														 <div class="table-list-title">
+															 <h3><a href="#" title="">@user.Name</a></h3>
+														 </div>
+													 </td>
+													 <td>
+														 <span class="applied-field">@user.Email</span>
+													 </td>
+													 <td>
+														 <ul class="action_job">
+															 <li><span>Reset</span><a asp-controller="Account" asp-action="ResetPass" asp-route-data ="@user.Id"><i class="fa fa-recycle"></i></a></li>
+															 <li><span>Delete</span><a asp-controller="Account" asp-action="Delete" asp-route-data ="@user.Id"><i class="la la-trash-o"></i></a></li>
+														 </ul>
+													 </td>
+												</tr>
 											}
 									 </tbody>
 								 </table>
 								 <div class="col-lg-12">
-									<button><a asp-controller="Categories" asp-action="Create">Create new category</a></button>
+									<button><a asp-area="Identity" asp-page="/Account/Register">Create new account</a></button>
 								</div>
 							 </div>
 						 </div>

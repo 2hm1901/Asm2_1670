@@ -1,4 +1,7 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<Asm2_1670.Models.User> SignInManager
+@inject UserManager<Asm2_1670.Models.User> UserManager
 <!DOCTYPE html><html><head>
 
 	<title>Job Hunt</title>
@@ -65,7 +68,7 @@
 									<ul>
 										<li><a asp-area="Employer" asp-controller="Job" asp-action="ManagerJob">Employer Job Manager</a></li>
 										<li><a asp-area="Employer" asp-controller="Job" asp-action="Postnew">Employer Post New</a></li>
-										<li><a asp-area="Employer" asp-controller="Employer" asp-action="Profile">Employer Profile</a></li>
+										<li><a asp-area="Employer" asp-controller="Categories" asp-action="Index">Request Category</a></li>
 									</ul>
 								</li>
 							}
@@ -74,9 +77,8 @@
 								<li class="menu-item-has-children">
 									<a href="#" title="">Candidates</a>
 									<ul>
-										<li><a href="candidates_list.html" title="">Candidates Resume</a></li>
-										<li><a href="candidates_list2.html" title="">Candidates Resume new</a></li>
-										<li><a href="candidates_list3.html" title="">Candidates Profile</a></li>
+										<li><a asp-area="Candidate" asp-controller="Profile" asp-action="Resume">Candidates Resume</a></li>
+										<li><a asp-area="Candidate" asp-controller="Profile" asp-action="Profile" asp-route-data="@UserManager.GetUserId(User)">Candidates Profile</a></li>
 										<li><a href="candidates_single.html" title="">Candidates Shortlist</a></li>
 										<li><a asp-area="Candidate" asp-controller="Apply" asp-action="Index">Applied Jobs</a></li>
 									</ul>
@@ -87,8 +89,8 @@
 									<li class="menu-item-has-children">
 											<a href="#" title="">Admin</a>
 										<ul>
-											<li><a href="candidates_list.html" title="">Manager Categories</a></li>
-											<li><a href="candidates_list2.html" title="">Manager Account</a></li>
+											<li><a asp-area="Admin" asp-controller="Categories" asp-action="Index">Manager Categories</a></li>
+											<li><a asp-area="Admin" asp-controller="Account" asp-action="Index">Manager Account</a></li>
 										</ul>
 									</li>
 							}
@@ -139,7 +141,7 @@
 										<ul>
 											<li><a asp-area="Employer" asp-controller="Job" asp-action="ManagerJob">Employer Job Manager</a></li>
 											<li><a asp-area="Employer" asp-controller="Job" asp-action="Postnew">Employer Post New</a></li>
-											<li><a asp-area="Employer" asp-controller="Employer" asp-action="Profile">Employer Profile</a></li>
+											<li><a asp-area="Employer" asp-controller="Categories" asp-action="Index">Request Category</a></li>
 										</ul>
 									</li>
 								}
@@ -148,9 +150,8 @@
 									<li class="menu-item-has-children">
 										<a href="#" title="">Candidates</a>
 										<ul>
-											<li><a href="candidates_list.html" title="">Candidates Resume</a></li>
-											<li><a href="candidates_list2.html" title="">Candidates Resume new</a></li>
-											<li><a href="candidates_list3.html" title="">Candidates Profile</a></li>
+											<li><a asp-area="Candidate" asp-controller="Profile" asp-action="Resume">Candidates Resume</a></li>
+											<li><a asp-area="Candidate" asp-controller="Profile" asp-action="Profile" asp-route-data="@UserManager.GetUserId(User)">Candidates Profile</a></li>
 											<li><a href="candidates_single.html" title="">Candidates Shortlist</a></li>
 											<li><a asp-area="Candidate" asp-controller="Apply" asp-action="Index">Applied Jobs</a></li>
 										</ul>
@@ -162,7 +163,7 @@
 												<a href="#" title="">Admin</a>
 											<ul>
 												<li><a asp-area="Admin" asp-controller="Categories" asp-action="Index">Manager Categories</a></li>
-												<li><a href="candidates_list2.html" title="">Manager Account</a></li>
+												<li><a asp-area="Admin" asp-controller="Account" asp-action="Index">Manager Account</a></li>
 											</ul>
 										</li>
 								}

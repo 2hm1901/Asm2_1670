@@ -1,21 +1,21 @@
-﻿using Asm2_1670.Data;
-using Asm2_1670.Models;
-using Asm2_1670.Repository;
+﻿using Asm2_1670.Models;
 using Asm2_1670.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Asm2_1670.Areas.Admin.Controllers
+namespace Asm2_1670.Areas.Employer.Controllers
 {
-	[Area("Admin")]
-	[Authorize(Roles = "Admin")]
+	[Area("Employer")]
+	[Authorize(Roles = "Employer")]
 	public class CategoriesController : Controller
 	{
+		private readonly IWebHostEnvironment _webHostEnvironment;
 		private readonly IUnitOfWork _unitOfWork;
-		public CategoriesController(IUnitOfWork unitOfWork)
+		public CategoriesController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
 		{
 			_unitOfWork = unitOfWork;
+			_webHostEnvironment = webHostEnvironment;
 		}
 		public string TakeIdUser()
 		{
@@ -34,18 +34,19 @@ namespace Asm2_1670.Areas.Admin.Controllers
 		}
 		public IActionResult Index()
 		{
-			List<Categories> myList = _unitOfWork.CategoriesRepository.GetAll().ToList();
+			Asm2_1670.Models.User user = TakeUser(TakeIdUser());
+			List<Categories> myList = _unitOfWork.CategoriesRepository.GetAll().Where(c => c.Proposer == user.Name).ToList();
 			return View(myList);
 		}
-		public IActionResult Create()
+		public IActionResult RequestNewCategory()
 		{
+			Asm2_1670.Models.User user = TakeUser(TakeIdUser());
 			return View();
 		}
 		[HttpPost]
-		public IActionResult Create(Categories categories)
+		public IActionResult RequestNewCategory(Categories categories)
 		{
-			Asm2_1670.Models.User user = TakeUser(TakeIdUser());
-			if(ModelState.IsValid)
+			if (ModelState.IsValid)
 			{
 				_unitOfWork.CategoriesRepository.Add(categories);
 				_unitOfWork.Save();
@@ -53,32 +54,7 @@ namespace Asm2_1670.Areas.Admin.Controllers
 			}
 			return View();
 		}
-		public IActionResult Edit(int? id)
-		{
-			Asm2_1670.Models.User user = TakeUser(TakeIdUser());
-			if (id == null || id == 0)
-			{
-				return NotFound();
-			}
-			Categories? category = _unitOfWork.CategoriesRepository.Get(c => c.Id == id);
-			if(category == null)
-			{
-				return NotFound();
-			}
-			return View(category);
-		}
-		[HttpPost]
-		public IActionResult Edit(Categories category)
-		{
-			if (ModelState.IsValid)
-			{
-				_unitOfWork.CategoriesRepository.Update(category);
-				_unitOfWork.Save();
-				return RedirectToAction("Index");
-			}
-			return View();
-		}
-		public IActionResult Delete(int? id)
+		public IActionResult EditRequest(int? id)
 		{
 			Asm2_1670.Models.User user = TakeUser(TakeIdUser());
 			if (id == null || id == 0)
@@ -93,12 +69,26 @@ namespace Asm2_1670.Areas.Admin.Controllers
 			return View(category);
 		}
 		[HttpPost]
-		public IActionResult Delete(Categories category)
+		public IActionResult EditRequest(Categories category)
 		{
+			if (ModelState.IsValid)
+			{
+				_unitOfWork.CategoriesRepository.Update(category);
+				_unitOfWork.Save();
+				return RedirectToAction("Index");
+			}
+			return View();
+		}
+		public IActionResult DeleteRequest(int? id)
+		{
+			if (id == null || id == 0)
+			{
+				return NotFound();
+			}
+			Categories category = _unitOfWork.CategoriesRepository.Get(c => c.Id == id);
 			_unitOfWork.CategoriesRepository.Delete(category);
 			_unitOfWork.Save();
 			return RedirectToAction("Index");
 		}
 	}
-	
 }

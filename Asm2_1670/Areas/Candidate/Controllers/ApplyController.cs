@@ -45,6 +45,21 @@ namespace Asm2_1670.Areas.Candidate.Controllers
 			}
 			return View(listApply);
 		}
+		public IActionResult ApplyJob(int? id, string? data)
+		{
+			string currentTime = DateTime.Now.ToShortDateString();
+			Application application = new Application
+			{
+				JobId = (int)id,
+				UserId = data,
+				AppliedTime = currentTime,
+				Status = "Processing"
+			};
+			_unitOfWork.ApplicationsRepository.Add(application);
+			_unitOfWork.Save();
+			
+			return RedirectToAction("Index", "Job", new { area = "User" });
+		}
 		public IActionResult Delete(int? id)
 		{
 			if(id == null || id == 0)

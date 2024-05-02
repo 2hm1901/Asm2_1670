@@ -27,47 +27,49 @@ namespace Asm2_1670.Areas.User.Controllers
 			ViewBag.UserId = userId;
 			ViewBag.Email = user.Email;
 			ViewBag.Name = user.Name;
+			ViewBag.Image = user.ImageUrl;
 			return user;
 		}
 		public IActionResult Index()
         {
-			
-			string UserId = TakeIdUser();
-			ViewBag.UserId = UserId;
+			if (!User.Identity.IsAuthenticated)
+			{
+				return RedirectToAction("Login", "Account", new { area = "Identity" });
+			}
+			if (User.Identity.IsAuthenticated)
+			{
+				string UserId = TakeIdUser();
+				TakeUser(UserId);
+			}
 			JobAppVM jobAppVM = new JobAppVM()
 			{
 				Application = new Application(),
 				MyListJob = _unitOfWork.JobsRepository.GetAll().ToList(),
 				MyListApplication = _unitOfWork.ApplicationsRepository.GetAll().ToList()
 			};
+			foreach(var job in jobAppVM.MyListJob)
+			{
+				job.User = _unitOfWork.UsersRepository.Get(u => u.Id == job.UserId);
+			}
 			return View(jobAppVM);
-        }
-		[HttpPost] 
-		public IActionResult Index(JobAppVM jobAppVM)
-		{
-			string currentTime = DateTime.Now.ToShortDateString();
-			jobAppVM.Application.AppliedTime = currentTime;
-			_unitOfWork.ApplicationsRepository.Add(jobAppVM.Application);
-			_unitOfWork.Save();
 
-			string UserId = TakeIdUser();
-			ViewBag.UserId = UserId;
-			jobAppVM.MyListJob = _unitOfWork.JobsRepository.GetAll().ToList();
-			jobAppVM.MyListApplication = _unitOfWork.ApplicationsRepository.GetAll().ToList();
-			return View(jobAppVM);
 		}
+		
         public IActionResult Jobdetail(int? id)
         {
+			Asm2_1670.Models.User user = TakeUser(TakeIdUser());
 			if (id == null || id == 0)
 			{
 				return NotFound();
 			}
-			Job? job = _unitOfWork.JobsRepository.Get(j => j.Id == id);
-			if (job == null)
+			JobAppVM JobAppVM = new JobAppVM()
 			{
-				return NotFound();
-			}
-			return View(job);
+				Job = _unitOfWork.JobsRepository.Get(j => j.Id == id),
+				Application = new Application(),
+				MyListApplication = _unitOfWork.ApplicationsRepository.GetAll().ToList()
+			};
+			JobAppVM.Job.User = _unitOfWork.UsersRepository.Get(u => u.Id == JobAppVM.Job.UserId);
+			return View(JobAppVM);
         }
     }
 }

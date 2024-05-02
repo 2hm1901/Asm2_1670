@@ -6,6 +6,7 @@
 		IEducationsRepository EducationsRepository { get; }
 		IAwardsRepository AwardsRepository { get; }
 		IPortfoliosRepository PortfoliosRepository { get; }
+		IWorkExperiencesRepository WorkExperiencesRepository { get; }
 		IUsersRepository UsersRepository { get; }
 		IJobsRepository JobsRepository { get; }
 		IApplicationsRepository ApplicationsRepository { get; }

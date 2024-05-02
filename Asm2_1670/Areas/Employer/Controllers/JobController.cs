@@ -40,7 +40,7 @@ namespace Asm2_1670.Areas.Employer.Controllers
 			TakeUser(userId);
 			JobVM jobVM = new JobVM()
 			{
-				Categories = _unitOfWork.CategoriesRepository.GetAll().Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
+				Categories = _unitOfWork.CategoriesRepository.GetAll().Where(c => c.Status == "Active").Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
 				{
 					Text = c.Name,
 					Value = c.Id.ToString(),
@@ -60,9 +60,9 @@ namespace Asm2_1670.Areas.Employer.Controllers
 				jobVM.Job.Name = ViewBag.Name;
 				_unitOfWork.JobsRepository.Add(jobVM.Job);
 				_unitOfWork.Save();
-				return RedirectToAction("Postnew");
+				return RedirectToAction("ManagerJob");
 			}
-			jobVM.Categories = _unitOfWork.CategoriesRepository.GetAll().Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
+			jobVM.Categories = _unitOfWork.CategoriesRepository.GetAll().Where(c => c.Status == "Active").Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
 			{
 				Text = c.Name,
 				Value = c.Id.ToString(),
@@ -71,13 +71,19 @@ namespace Asm2_1670.Areas.Employer.Controllers
 		}
 		public IActionResult ManagerJob()
 		{
+			int count;
 			string userId = TakeIdUser();
 			TakeUser(userId);
 			if (userId == null)
 			{
 				return NotFound();
 			}
-			List<Job> mylist = _unitOfWork.JobsRepository.GetAll().ToList();
+			List<Job> mylist = _unitOfWork.JobsRepository.GetAll().Where(j => j.UserId == userId).ToList();
+			foreach(var job in mylist)
+			{
+				count = _unitOfWork.ApplicationsRepository.GetAll().Count(a => a.JobId == job.Id && a.Status == "Processing");
+				job.Count = count;
+			}
 			return View(mylist);
 		}
 		public IActionResult EditJob(int? id)
@@ -86,14 +92,14 @@ namespace Asm2_1670.Areas.Employer.Controllers
 			TakeUser(userId);
 			JobVM jobVM = new JobVM()
 			{
-				Categories = _unitOfWork.CategoriesRepository.GetAll().Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
+				Categories = _unitOfWork.CategoriesRepository.GetAll().Where(c => c.Status == "Active").Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
 				{
 					Text = c.Name,
 					Value = c.Id.ToString(),
 				}),
 				Job = _unitOfWork.JobsRepository.Get(j => j.Id == id)
 			};
-			jobVM.Categories = _unitOfWork.CategoriesRepository.GetAll().Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
+			jobVM.Categories = _unitOfWork.CategoriesRepository.GetAll().Where(c => c.Status == "Active").Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
 			{
 				Text = c.Name,
 				Value = c.Id.ToString(),
@@ -109,7 +115,7 @@ namespace Asm2_1670.Areas.Employer.Controllers
 				_unitOfWork.Save();
 				return RedirectToAction("ManagerJob");
 			}
-			jobVM.Categories = _unitOfWork.CategoriesRepository.GetAll().Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
+			jobVM.Categories = _unitOfWork.CategoriesRepository.GetAll().Where(c => c.Status == "Active").Select(c => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem()
 			{
 				Text = c.Name,
 				Value = c.Id.ToString(),

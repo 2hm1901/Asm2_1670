@@ -78,42 +78,40 @@
 									<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
 										<div class="job-grid border">
 											<div class="job-title-sec">
-												<div class="c-logo"> <img src="~/images/jg1.png" alt=""> </div>
+												<div class="c-logo"> <img src="@job.User.ImageUrl" alt=""> </div>
 												<h3><a asp-controller="Job" asp-action="Jobdetail" asp-route-id="@job.Id">@job.JobTitle</a></h3>
 												<span>@job.Name</span>
 												<span class="fav-job"><i class="la la-heart-o"></i></span>
 											</div>
 											<span class="job-lctn">@job.City, @job.Country</span>
-											<form method="post">
-												<input hidden asp-for="@Model.Application.Id"/>
-												<input hidden asp-for="@Model.Application.JobId" type="text" value="@job.Id">
-												<input hidden asp-for="@Model.Application.UserId" type="text" value="@ViewBag.UserId">
-												<input hidden asp-for="@Model.Application.AppliedTime" type="text" value="wait">
-												<input hidden asp-for="@Model.Application.Status" type="text" value="Processing">
-												@foreach(var application in Model.MyListApplication)
-												{
-														if(application.UserId == ViewBag.UserId)
+											@if(User.IsInRole("Candidate"))
+											{
+														@*<input hidden asp-for="@Model.Application.Id"/>
+														<input hidden asp-for="@Model.Application.JobId" type="text" value="@job.Id">
+														<input hidden asp-for="@Model.Application.UserId" type="text" value="@ViewBag.UserId">
+														<input hidden asp-for="@Model.Application.AppliedTime" type="text" value="wait">
+														<input hidden asp-for="@Model.Application.Status" type="text" value="Processing">*@
+														@foreach (var application in Model.MyListApplication)
 														{
-															if(application.JobId == job.Id)
+															if (application.UserId == ViewBag.UserId)
 															{
-																flag = true;
-																break;
+																if (application.JobId == job.Id)
+																{
+																	flag = true;
+																	break;
+																}
 															}
-														}	
-												}
-												@if (flag)
-												{
-													<button disabled style="float: right; font-family: Open Sans; font-size: 13px; color: #fb236a; border: 1px solid #fb236a; background-color: transparent; padding: 6px 14px; letter-spacing: 0px; margin: 16px 0; display: inline-block;" type="submit">
-													APPLIED
-													</button>
-												}
-												else{
-													<button style="float: right; font-family: Open Sans; font-size: 13px; color: #fb236a; border: 1px solid #fb236a; background-color: transparent; padding: 6px 14px; letter-spacing: 0px; margin: 16px 0; display: inline-block;" type="submit">
-													APPLY NOW
-													</button>
-												}
+														}
+														@if (flag)
+														{
+																<a>APPLIED</a>
+														}
+														else
+														{
+																<a asp-area="Candidate" asp-controller="Apply" asp-action="ApplyJob" asp-route-id="@job.Id" asp-route-data="@ViewBag.UserId">APPLY NOW</a>
+														}
 
-											</form>
+											}
 										</div><!-- JOB Grid -->
 									</div>
 									}

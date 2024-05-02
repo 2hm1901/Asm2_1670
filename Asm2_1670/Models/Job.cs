@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Asm2_1670.Models
@@ -7,6 +8,8 @@ namespace Asm2_1670.Models
 	{
 		public int Id { get; set; }
 		public string UserId { get; set; }
+		[ForeignKey("UserId")]
+		public User? User { get; set; }
 		public string JobTitle { get; set; }
 		public string Description { get; set; }
 		public string Email { get; set; }
@@ -25,7 +28,6 @@ namespace Asm2_1670.Models
 		public string Qualification { get; set; }
 		public string Country { get; set; }
 		public string City { get; set; }
-
-
+		public int? Count { get; set; }
 	}
 }

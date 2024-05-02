@@ -10,6 +10,7 @@ namespace Asm2_1670.Repository
 		public IEducationsRepository EducationsRepository { get; private set; }
 		public IAwardsRepository AwardsRepository { get; private set; }
 		public IPortfoliosRepository PortfoliosRepository { get; private set; }
+		public IWorkExperiencesRepository WorkExperiencesRepository { get; private set; }
 		public IUsersRepository UsersRepository { get; private set; }
 		public IJobsRepository JobsRepository { get; private set; }
 		public IApplicationsRepository ApplicationsRepository { get; private set; }
@@ -21,6 +22,7 @@ namespace Asm2_1670.Repository
 			EducationsRepository = new EducationsRepository(dbContext);
 			AwardsRepository = new AwardsRepository(dbContext);
 			PortfoliosRepository = new PortfoliosRepository(dbContext);
+			WorkExperiencesRepository = new WorkExperiencesRepository(dbContext);
 			UsersRepository = new UsersRepository(dbContext);
 			JobsRepository = new JobsRepository(dbContext);
 			ApplicationsRepository = new ApplicationsRepository(dbContext);

@@ -125,15 +125,15 @@ namespace Asm2_1670.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                if(Input.Role == "Employer")
+                if (Input.Role == "Employer")
                 {
-					_userManager.AddToRoleAsync(user, "Employer").GetAwaiter().GetResult();
-				}
+                    _userManager.AddToRoleAsync(user, "Employer").GetAwaiter().GetResult();
+                }
                 else
                 {
-					_userManager.AddToRoleAsync(user, "Candidate").GetAwaiter().GetResult();
-				}
-				await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                    _userManager.AddToRoleAsync(user, "Candidate").GetAwaiter().GetResult();
+                }
+                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.Name = Input.Name;
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -160,6 +160,10 @@ namespace Asm2_1670.Areas.Identity.Pages.Account
                     }
                     else
                     {
+                        if (User.IsInRole("Admin"))
+                        {
+                            return RedirectToAction("Index", "Account", new { area = "Admin" });
+                        }
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }

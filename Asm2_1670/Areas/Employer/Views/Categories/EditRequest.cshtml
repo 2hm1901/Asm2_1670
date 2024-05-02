@@ -23,7 +23,7 @@
 					 <div class="col-lg-9 column">
 						 <div class="padding-left">
 							 <div class="profile-title">
-								 <h3>Create category</h3>
+								 <h3>Edit category</h3>
 							 </div>
 							 <div class="profile-form-edit">
 								 <form method="post">
@@ -43,28 +43,19 @@
 											 </div>
 										 </div>
 										 <div class="col-lg-12">
-											 <span class="pf-title">Proposer</span>
+											 <span asp-for="Proposer" class="pf-title">Proposer</span>
 											 <div class="pf-field">
-												 <input asp-for="Proposer" type="text" value="@ViewBag.Name" disabled>
+												 <input disabled asp-for="Proposer" type="text" value="@ViewBag.Name">
 												 <span asp-validation-for="Proposer" class="text-danger"></span>
 											 </div>
 										 </div>
-										
+
+										 <input hidden asp-for="Status" value="Inactive"/>
 										 <div class="col-lg-12">
-											 <span asp-for="Status" class="pf-title">Status</span>
-											 <div style="padding-bottom: 60px" class="pf-field">
-												 <select asp-for="Status" data-placeholder="Please Select Specialism" class="chosen">
-													<option value="Active">Active</option>
-													<option value="Inactive">Inactive</option>
-													<option value="Denined">Denined</option>
-												</select>
-											 </div>
-										 </div>
-										 <div class="col-lg-12">
-											 <button type="submit" class="btn btn-primary">Create</button>
+											 <button type="submit" class="btn btn-primary">Edit</button>
 											 <a asp-controller="Categories" asp-action="Index" class="btn btn-primary">Back to List</a>
 										 </div>
-										 
+
 									 </div>
 								 </form>
 							 </div>

@@ -16,9 +16,9 @@ namespace Asm2_1670.Areas.Identity.Pages.Account
 {
     public class ResetPasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<Asm2_1670.Models.User> _userManager;
 
-        public ResetPasswordModel(UserManager<IdentityUser> userManager)
+        public ResetPasswordModel(UserManager<Asm2_1670.Models.User> userManager)
         {
             _userManager = userManager;
         }
